@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="content-container">
+    <div class="container">
+        <div class="content-1">
+            <input type="text" value="" placeholder="Type your email" required class="input user" onblur="validEmail(this.value)">
+            <div class="border"></div>
+        </div>
+        <div class="button ok" onclick="show()">
+            <div class="button-label">
+                Send OTP
+            </div>
+        </div>
+    </div>
+    <div class="message">
+        <div class="send-message"></div>
+    </div>
+    <div class="after"  style="display: none;">
+        <div class="content-2">
+            <input type="text" value="" placeholder="Enter passcode" required class="input password">
+            <div class="border"></div>
+        </div>
+        <div class="button login" onclick="login()">
+            <div class="button-label">
+                Login
+            </div>
+        </div>
+        <div class="message-2">
+            <div class="send-message-2"></div>
+        </div>
+    </div>
+    </div>
+    <style>
+        .content-container{
+            margin: 100px;
+        }
+        .button:hover{
+            cursor: pointer;
+        }
+    </style>
+</body>
+<script>
+    const show= async ()=>{
+        if(document.querySelector(".input.user").value==""){
+            alert('Fill up the fields')
+           return
+        }
+        data={}
+        data.mail=document.querySelector(".input.user").value
+
+        const url=`${window.location.origin}/api/user/sentmail`
+        console.log(url)
+        await fetch(url,{
+            method:'POST',
+         
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body : JSON.stringify(data)
+        })
+            .then((Response)=>Response.json())
+            .then((back)=>{
+                if(back.status)
+                {
+                    console.log(back.data)
+                    document.querySelector(".send-message").innerHTML="Code sent in mail"
+                    const aftermail = document.querySelector(".after")
+                    if(aftermail.style.display=="none"){
+                        aftermail.style.display="block"
+                    }
+                }
+                else
+                {
+                    // document.querySelector('.error-message').style.display='block'
+                    document.querySelector('.send-message').innerHTML=`${back.error}`
+                }
+            })
+         
+    }
+
+
+
+    const validEmail=(email)=>{
+        
+        var mailformat = /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/
+        if(email.match(mailformat))
+        {
+            document.querySelector(".input.user").style.color='green'
+            return true;
+        }
+        else
+        {
+            document.querySelector(".input.user").focus()
+            document.querySelector(".input.user").style.color='red'
+            return false;
+        }
+    }
+   
+    const login=async()=>{
+        
+        var email = document.querySelector(".input.user").value
+        const url = `${window.location.origin}/api/user/matchpass/@${email}`
+        console.log(url)
+        var data={}
+        data.passcode=document.querySelector(".input.password").value
+        await fetch(url,{
+            method:'POST',
+         
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body : JSON.stringify(data)
+        })
+            .then((Response)=>Response.json())
+            .then((back)=>{
+                if(back.status)
+                {
+                    console.log(back.data)
+                    // document.querySelector(".send-message").innerHTML="Code sent in mail"
+                    location.assign(`${window.location.origin}/index`)
+                }
+                else
+                {
+                    // document.querySelector('.error-message').style.display='block'
+                    document.querySelector('.send-message-2').innerHTML=`${back.error}`
+                }
+            })
+
+    }
+
+</script>
+</html>
