@@ -72,16 +72,16 @@ router.post("/signup",async(req,res)=>{
 })
 
 
-const makeid=(length) => {
-    var result           = [];
-    var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result.push(characters.charAt(Math.floor(Math.random() * 
- charactersLength)));
-   }
-   return result.join('');
-}
+// const makeid=(length) => {
+//     var result           = [];
+//     var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
+//     var charactersLength = characters.length;
+//     for ( var i = 0; i < length; i++ ) {
+//       result.push(characters.charAt(Math.floor(Math.random() * 
+//  charactersLength)));
+//    }
+//    return result.join('');
+// }
 
 
 router.post("/sentmail",async(req,res)=>{
