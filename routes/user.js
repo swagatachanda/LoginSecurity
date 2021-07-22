@@ -3,6 +3,8 @@ const User = require("../model/userdetails")
 const nodemailer=require("nodemailer")
 const bcrypt=require("bcrypt")
 const fetch=require("node-fetch")
+const { v4: uuidv4 } = require('uuid')
+const shortId = require("shortid")
 require('dotenv').config()
 
 const router = express.Router()
@@ -83,7 +85,8 @@ const makeid=(length) => {
 
 
 router.post("/sentmail",async(req,res)=>{
-    const code =makeid(6)
+    // const code = uuidv4()
+    const code = shortId.generate()
     var status={}
     var response=await validateuseremail(req.body.mail)
     if(response==false){
